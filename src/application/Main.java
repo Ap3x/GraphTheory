@@ -19,24 +19,13 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		int SceneSizeX = 1000;
 		int SceneSizeY = 1000;
-		int textSize = 13;
-		Color text = Color.RED;
 		BorderPane root = new BorderPane();
 		primaryStage.setScene(new Scene(root, SceneSizeX, SceneSizeY, Color.BLACK));
-		int threshold = 500;
-		int numOfCircles = 10;
-		int x1, y1, x2, y2;
+		int radiusThreshold = 200;
+		int numOfCircles = 100;
+		int x1, y1, x2, y2, x3, y3;
 		ArrayList<Integer> Xcord1 = new ArrayList<>();
 		ArrayList<Integer> Ycord1 = new ArrayList<>();
-
-		// Edge Connections
-		ArrayList<Integer> distance = new ArrayList<>();
-		ArrayList<Integer> indexXYcord1 = new ArrayList<>();
-		ArrayList<Integer> indexXYcord2 = new ArrayList<>();
-		ArrayList<Integer> XcordEdge1 = new ArrayList<>();
-		ArrayList<Integer> YcordEdge1 = new ArrayList<>();
-		ArrayList<Integer> XcordEdge2 = new ArrayList<>();
-		ArrayList<Integer> YcordEdge2 = new ArrayList<>();
 
 		// This adds the circles to the scene
 		Random rand = new Random();
@@ -48,7 +37,6 @@ public class Main extends Application {
 		}
 
 		// This is the decision making for the connection process
-		// int[] temp;
 		for (int x = 0; x < numOfCircles - 1; x++) {
 			x1 = Xcord1.get(x);
 			y1 = Ycord1.get(x);
@@ -57,138 +45,112 @@ public class Main extends Application {
 				y2 = Ycord1.get(y);
 
 				// If its within the radius then make the connection
-				if ((int) Math.sqrt(Math.pow(Math.abs(x1 - x2), 2) + Math.pow(Math.abs(y1 - y2), 2)) < threshold) {
-					// if (Math.abs(x1 - x2) < threshold && Math.abs(y1 - y2) < threshold) {
+				if ((int) Math
+						.sqrt(Math.pow(Math.abs(x1 - x2), 2) + Math.pow(Math.abs(y1 - y2), 2)) < radiusThreshold) {
+
 					Line Edge = new Line(x1, y1, x2, y2);
-
-					int dist = (int) Math.sqrt(Math.pow(Math.abs(x1 - x2), 2) + Math.pow(Math.abs(y1 - y2), 2));
-
-					Text t = new Text((Math.abs(x1 + x2) / 2) + 5, (Math.abs(y1 + y2) / 2) - 5, Integer.toString(dist));
-
-					distance.add(dist);
-					// indexXYcord1.add(x);
-					indexXYcord2.add(y);
-					t.setFont(new Font(textSize));
-					Edge.setStroke(Color.WHITE);
-					t.setFill(text);
-					t.setStrokeWidth(4);
-					// Edge.setStrokeWidth(2);
-					root.getChildren().addAll(t, Edge);
+					Edge.setStroke(Color.DARKGRAY);
+					// Edge.setStrokeWidth(1/12);
+					root.getChildren().addAll(Edge);
 					primaryStage.show();
 				}
 				for (int z = x + 1; z < numOfCircles; z++) {
 					x2 = Xcord1.get(z);
 					y2 = Ycord1.get(z);
-					if ((int) Math.sqrt(Math.pow(Math.abs(x1 - x2), 2) + Math.pow(Math.abs(y1 - y2), 2)) < threshold) {
-						// if (Math.abs(x1 - x2) < threshold && Math.abs(y1 - y2) < threshold) {
-
+					if ((int) Math
+							.sqrt(Math.pow(Math.abs(x1 - x2), 2) + Math.pow(Math.abs(y1 - y2), 2)) < radiusThreshold) {
 						Line Edge = new Line(x1, y1, x2, y2);
-						int dist = (int) Math.sqrt(Math.pow(Math.abs(x1 - x2), 2) + Math.pow(Math.abs(y1 - y2), 2));
-
-						Text t = new Text((Math.abs(x1 + x2) / 2) + 5, (Math.abs(y1 + y2) / 2) - 5,
-								Integer.toString(dist));
-						t.setFont(new Font(textSize));
-						Edge.setStroke(Color.WHITE);
-						t.setFill(text);
-						t.setStrokeWidth(4);
-						// Edge.setStrokeWidth(2);
-						root.getChildren().addAll(t, Edge);
+						Edge.setStroke(Color.DARKGRAY);
+						root.getChildren().addAll(Edge);
 						primaryStage.show();
 					}
 				}
 
-				// int newint = distance.indexOf(Collections.min(distance));
-
 			}
 		}
-		Circle start = new Circle(Xcord1.get(0), Ycord1.get(0), 5, Color.BLUE); // First dot
-		Circle end = new Circle(Xcord1.get(numOfCircles - 1), Ycord1.get(numOfCircles - 1), 5, Color.RED); // Last Dot
+		Circle start = new Circle(Xcord1.get(0), Ycord1.get(0), 10, Color.BLUE); // First dot
+		Circle end = new Circle(Xcord1.get(numOfCircles - 1), Ycord1.get(numOfCircles - 1), 10, Color.RED); // Last Dot
 		root.getChildren().addAll(start, end);
 		primaryStage.show();
 
 		for (int z = 1; z < numOfCircles - 1; z++) {
-			Circle Node1 = new Circle(Xcord1.get(z), Ycord1.get(z), 5, Color.YELLOW);
+			Circle Node1 = new Circle(Xcord1.get(z), Ycord1.get(z), 10, Color.YELLOW);
 
 			root.getChildren().addAll(Node1);
 			primaryStage.show();
 		}
 
-		// Start of shortest path
-		// for(int newindex = 0; newindex < distance.size(); newindex++)
-		// {
-		// if(Xcord1.get(0)==Xcord1.get(indexXYcord1.get(newindex)) &&
-		// Ycord1.get(0)==Ycord1.get(indexXYcord1.get(newindex)))
-		// {
-		// Line Short = new Line(Xcord1.get(indexXYcord1.get(newindex)),
-		// Ycord1.get(indexXYcord1.get(newindex)),
-		// Xcord1.get(indexXYcord1.get(newindex)),
-		// Ycord1.get(indexXYcord1.get(newindex)));
-		// Short.setStroke(Color.BLUE);
-		// root.getChildren().addAll(Short);
-		// primaryStage.show();
-		// }
-		// else {
-		// Line EdgeShort = new Line(0,0,1000+(newindex*300),200+(newindex*300));
-		// EdgeShort.setStroke(Color.YELLOW);
-		// root.getChildren().add(EdgeShort);
-		// primaryStage.show();
-		//
-		// }
-		// }
+		double degreesFromStartToFinish = Math.toDegrees(
+				Math.atan2(Xcord1.get(0) - Xcord1.get(numOfCircles - 1), Ycord1.get(0) - Ycord1.get(numOfCircles - 1)));
+		int currentNodeX = Xcord1.get(0);
+		int currentNodeY = Ycord1.get(0);
+		int nextNodeX, nextNodeY;
+		ArrayList<Integer> pointsToCheckX = new ArrayList<>();
+		ArrayList<Integer> pointsToCheckY = new ArrayList<>();
+		ArrayList<Double> dist = new ArrayList<>();
+		boolean breakLoop = true;
+		int count = 0;
+		while (breakLoop) {
+			for (int n = 1; n < numOfCircles; n++) {
+				x3 = Xcord1.get(n);
+				y3 = Ycord1.get(n);
+				if ((int) Math.sqrt(Math.pow(Math.abs(currentNodeX - x3), 2)
+						+ Math.pow(Math.abs(currentNodeY - y3), 2)) < radiusThreshold) {
+					if (Math.toDegrees(Math.atan2(currentNodeX - x3, currentNodeY - y3)) > degreesFromStartToFinish - 90
+							&& Math.toDegrees(
+									Math.atan2(currentNodeX - x3, currentNodeY - y3)) < degreesFromStartToFinish + 90) {
+						pointsToCheckX.add(x3);
+						pointsToCheckY.add(y3);
 
-		// ArrayList<Integer> Temp = new ArrayList<>();
-		// ArrayList<Integer> XYxyEdge = new ArrayList<>();
-		//
-		// for(int i = 0; i< 1000; i++) {
-		// if(XcordEdge1.get(i)==Xcord1.get(0) && YcordEdge1.get(i)==Ycord1.get(0))
-		// {
-		// int xdiff = (int)
-		// Math.pow(Math.abs((XcordEdge1.get(i)-XcordEdge2.get(i))),2);
-		// int ydiff = (int)
-		// Math.pow(Math.abs((YcordEdge1.get(i)-YcordEdge2.get(i))),2);
-		// int distance = (int) Math.sqrt(xdiff+ydiff);
-		// Temp.add(distance);
-		// XYxyEdge.add(i);
-		// Line EdgeShort = new
-		// Line(XcordEdge1.get(i),YcordEdge1.get(i),XcordEdge2.get(i),YcordEdge2.get(i));
-		// EdgeShort.setStroke(Color.YELLOW);
-		// root.getChildren().add(EdgeShort);
-		// primaryStage.show();
-		// }
-		// else if(XcordEdge2.get(i)==Xcord1.get(0) && YcordEdge2.get(i)==Ycord1.get(0))
-		// {
-		// int xdiff = (int)
-		// Math.pow(Math.abs((XcordEdge1.get(i)-XcordEdge2.get(i))),2);
-		// int ydiff = (int)
-		// Math.pow(Math.abs((YcordEdge1.get(i)-YcordEdge2.get(i))),2);
-		// int distance = (int) Math.sqrt(xdiff+ydiff);
-		// Temp.add(distance);
-		// XYxyEdge.add(i);
-		// Line EdgeShort = new
-		// Line(XcordEdge1.get(i),YcordEdge1.get(i),XcordEdge2.get(i),YcordEdge2.get(i));
-		// EdgeShort.setStroke(Color.YELLOW);
-		// root.getChildren().add(EdgeShort);
-		// primaryStage.show();
-		// }
-		// else {
-		// Line EdgeShort = new Line(0,0,1000+(i*300),200+(i*300));
-		// EdgeShort.setStroke(Color.YELLOW);
-		// root.getChildren().add(EdgeShort);
-		// primaryStage.show();
-		//
-		// }
-		// }
-		// int newint = Temp.indexOf(Collections.min(Temp));
-		// Line EdgeShort = new Line(XcordEdge1.get(XYxyEdge.get(newint)),
-		// YcordEdge1.get(XYxyEdge.get(newint)),
-		// XcordEdge2.get(XYxyEdge.get(newint)),
-		// YcordEdge1.get(XYxyEdge.get(newint)));
-		// EdgeShort.setStroke(Color.YELLOW);
-		// root.getChildren().add(EdgeShort);
-		// primaryStage.show();
-		//
+						// Line Edge = new Line(currentNodeX, currentNodeY, x3, y3);
+						// Edge.setStroke(Color.YELLOW);
+						// Edge.setStrokeWidth(2);
+						// root.getChildren().addAll(Edge);
+						// primaryStage.show();
+					}
 
-	}// End of Start Method
+				}
+			}
+			for (int b = 0; b < pointsToCheckX.size(); b++) {
+				double degreesClosestToLine = Math.toDegrees(
+						Math.atan2(currentNodeX - pointsToCheckX.get(b), currentNodeY - pointsToCheckY.get(b)));
+				dist.add(degreesClosestToLine);
+			}
+
+			// Finds the closest angle
+
+			double myNumber = degreesFromStartToFinish;
+
+			double degrees = Math.abs(dist.get(0) - myNumber);
+			int idx = 0;
+			for (int c = 1; c <= dist.size()-1; c++) {
+				double cdistance = Math.abs(dist.get(c) - myNumber);
+				if (cdistance < degrees) {
+					idx = c;
+					degrees = cdistance;
+				}
+			}
+			// int theNumber = dist.get(idx);
+			// int minIndex = dist.indexOf(Collections.min(dist));
+			nextNodeX = pointsToCheckX.get(idx);
+			nextNodeY = pointsToCheckY.get(idx);
+			degreesFromStartToFinish = Math.toDegrees(Math.atan2(currentNodeX - Xcord1.get(numOfCircles - 1),
+					currentNodeY - Ycord1.get(numOfCircles - 1)));
+			Line Edge = new Line(currentNodeX, currentNodeY, nextNodeX, nextNodeY);
+			Edge.setStroke(Color.PURPLE);
+			Edge.setStrokeWidth(5);
+			root.getChildren().addAll(Edge);
+			primaryStage.show();
+			currentNodeX = nextNodeX;
+			currentNodeY = nextNodeY;
+			dist.clear();
+			count++;
+			if (Xcord1.get(numOfCircles - 1) == currentNodeX && Ycord1.get(numOfCircles -1) == currentNodeY) {
+			breakLoop = false;
+			}
+
+		}
+	}
 
 	public static void main(String[] args) {
 		launch(args);
